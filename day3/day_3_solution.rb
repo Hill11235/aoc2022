@@ -17,8 +17,12 @@ class Day3
 
     end
 
-    def getCommonChar(strArr)
+    def getCommonCharTwo(strArr)
         return strArr[0] & strArr[1]
+    end
+
+    def getCommonCharThree(strArr)
+        return strArr[0] & strArr[1] & strArr[2]
     end
 
     def getStringHalves(str)
@@ -28,7 +32,7 @@ class Day3
         return [s1, s2]
     end
 
-    def getUniqueChars(strArr)
+    def getUniqueCharsTwo(strArr)
         uniqueStr0 = strArr[0].chars.to_a.uniq
         uniqueStr1 = strArr[1].chars.to_a.uniq
         uniqueStr1.pop
@@ -36,20 +40,51 @@ class Day3
         return [uniqueStr0, uniqueStr1]
     end
 
-    def runLoop
+    def getUniqueCharsThree(strArr)
+        uniqueStr0 = strArr[0].chars.to_a.uniq
+        uniqueStr1 = strArr[1].chars.to_a.uniq
+        uniqueStr2 = strArr[2].chars.to_a.uniq
+        uniqueStr0.pop
+        uniqueStr1.pop
+        uniqueStr2.pop
+
+        return [uniqueStr0, uniqueStr1, uniqueStr2]
+    end
+
+    def question1
         running_total = 0
 
         File.readlines(@fileName).each do |line|
             strArr = getStringHalves(line)
-            uniqueArr = getCommonChar(getUniqueChars(strArr))
+            uniqueArr = getCommonCharTwo(getUniqueCharsTwo(strArr))
             running_total += getCharScore(uniqueArr)
         end
 
         puts running_total
     end
 
+    def question2
+        running_total = 0
+        counter = 0
+        threeArr = []
+
+        File.readlines(@fileName).each do |line|
+            counter += 1
+            threeArr.append(line)
+            
+            if counter != 0 && counter % 3 == 0
+                arr = getUniqueCharsThree(threeArr)
+                char = getCommonCharThree(arr)
+                running_total += getCharScore(char)
+                threeArr = []
+            end
+        end
+
+        puts running_total
+    end
 end
 
 fileName = "real.txt"
 game1 = Day3.new(fileName)
-game1.runLoop
+game1.question1
+game1.question2
