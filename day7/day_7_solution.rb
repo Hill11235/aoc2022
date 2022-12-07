@@ -7,18 +7,23 @@ class FileStructure
         @activeDir = nil
     end
 
-    # loop through file and parse file data
-    # create dirs, set active dir, add parsed files
     def parseDataFile(dataFile)
-
+        File.readlines(@fileName).each do |line|
+            parseLine(line)
+        end
     end
 
     def parseLine(line)
-
+        if line.include? "cd"
+            handleCd(line)
+        elsif line.include? "dir"
+            handleDir(line)
+        elsif !line.include? "ls"
+            handleFile(line)
+        end
     end
 
     def handleCd(str)
-        # three scenarios
         arr = str.split
         keyChange = arr[2]
 
@@ -57,8 +62,28 @@ class FileStructure
         return nil
     end
 
-    def question1
+    def getAllDirSizes
+        sizeMap = {}
 
+        @directoryList.each {|dir|
+            sizeMap.store(dir.name, dir.getTotalSizeOfDir)
+        }
+
+        return sizeMap
+    end
+
+    def question1(limit)
+        parseDataFile(@fileName)
+        dirSizes = getAllDirSizes
+
+        total_size = 0
+        dirSizes.each do |k, v|
+            if v <= limit
+                total_size += v
+            end
+        end
+
+        return total_size
     end
 
     def question2
@@ -67,3 +92,5 @@ class FileStructure
 end
 
 dataFile = "test.txt"
+fs = FileStructure.new(dataFile)
+puts fs.question1(100000)
