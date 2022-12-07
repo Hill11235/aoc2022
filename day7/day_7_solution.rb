@@ -4,13 +4,25 @@ class FileStructure
         @fileName = fileName
         @rootDir = Directory.new("/", nil)
         @directoryList = [rootDir]
+        @activeDir = nil
     end
 
     # loop through file and parse file data
     # create dirs, set active dir, add parsed files
     def parseDataFile(dataFile)
-        activeDir = rootDir
 
+    end
+
+    def handleCd(str)
+        # three scenarios
+    end
+
+    def handleDir(str)
+        # create new fir correctly
+    end
+
+    def handleFile(str)
+        # split line and create file using constituent parts
     end
 
     def createNewDir(name, parentDir)

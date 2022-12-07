@@ -13,4 +13,8 @@ class ElfFile
     def size
         @size
     end
+
+    def print
+        puts "name: #{@name}, size: #{@size}, parentDir: #{@parentDir}"
+    end
 end
