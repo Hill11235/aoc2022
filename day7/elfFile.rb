@@ -1,3 +1,5 @@
+require_relative 'directory'
+
 class ElfFile
 
     def initialize(name, size, parentDir)
@@ -16,6 +18,6 @@ class ElfFile
     end
 
     def print
-        puts "name: #{@name}, size: #{@size}, parentDir: #{@parentDir}"
+        puts "name: #{@name}, size: #{@size}, parentDir: #{@parentDir.name}"
     end
 end
