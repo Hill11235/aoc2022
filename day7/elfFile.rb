@@ -4,6 +4,7 @@ class ElfFile
         @name = name
         @size = size
         @parentDir = parentDir
+        @parentDir.addFile(self)
     end
 
     def parentDir

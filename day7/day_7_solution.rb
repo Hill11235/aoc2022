@@ -13,20 +13,39 @@ class FileStructure
 
     end
 
+    def parseLine(line)
+
+    end
+
     def handleCd(str)
         # three scenarios
+        arr = str.split
+        keyChange = arr[2]
+
+        if keyChange == "/"
+            @activeDir = @rootDir
+        elsif keyChange == ".."
+            @activeDir = @activeDir.parentDir
+        else
+            @activeDir = getDir(keyChange)
+        end
     end
 
     def handleDir(str)
-        # create new fir correctly
+        arr = str.split
+        keyChange = arr[1]
+        createNewDir(keyChange, @activeDir)
     end
 
     def handleFile(str)
-        # split line and create file using constituent parts
+        arr = str.split
+        newFile = ElfFile.new(arr[1], arr[0].to_i, @parentDir)
     end
 
     def createNewDir(name, parentDir)
-        return Directory.new(name, parentDir)
+        newDir = Directory.new(name, parentDir)
+        @directoryList.append(newDir)
+        return newDir
     end
 
     def getDir(name)
