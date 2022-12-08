@@ -18,30 +18,75 @@ class TreeGrid
     end
 
     def parseLine(line)
-        # split line by individual chars, pop last, add arr to grid
+        arr = line.scan(/\w/)
+        @grid.append(arr)
     end
 
-    # TODO: change to check both top and bottom
+    def runChecks(x, y)
+        return verticalCheck(x, y) || horizontalCheck(x, y)
+    end
+
     def verticalCheck(x, y)
+        height = @grid[y][x]
+        topCheck = true
+        bottomCheck = true
 
+        counter = 0
+        while counter < y
+            if @grid[counter][x] >= height
+                topCheck = false
+            end
+            counter += 1
+        end
+
+        counter += 1
+        while counter < @grid.length
+            if @grid[counter][x] >= height
+                bottomCheck = false
+            end
+            counter += 1
+        end
+        return topCheck || bottomCheck
     end
 
-    # TODO: change to check both left and right functionality
     def horizontalCheck(x, y)
-        row = @grid(x)
-        height = row[y]
+        row = @grid[y]
+        left = row[0, x]
+        right = row[x + 1, row.length]
+        height = row[x]
+        leftCheck = true
+        rightCheck = true
 
-        row.each_with_index { |val, index|
-            if index != y && val
+        left.each { |val|
+            if val >= height
+                leftCheck = false
+            end
         }
 
-        end
-        
-        return true
+        right.each { |val|
+            if val >= height
+                rightCheck = false
+            end
+        }
+
+        return leftCheck || rightCheck
     end
 
     def question1
+        running_total = 0
+        parseDataFile
 
+        @grid.each_with_index { |arr, y|
+            arr.each_with_index { |val, x|
+                if x == 0 || y == 0 || x == @grid.length - 1 || y == @grid.length - 1
+                    running_total += 1 
+                elsif runChecks(x, y)
+                    running_total += 1
+                end
+            }
+        }
+
+        return running_total
     end
 
     def question2
@@ -49,5 +94,6 @@ class TreeGrid
     end
 end
 
-dataFile = "test.txt"
+dataFile = "real.txt"
 forest = TreeGrid.new(dataFile)
+puts forest.question1
