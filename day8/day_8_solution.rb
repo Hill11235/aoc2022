@@ -21,12 +21,23 @@ class TreeGrid
         # split line by individual chars, pop last, add arr to grid
     end
 
+    # TODO: change to check both top and bottom
     def verticalCheck(x, y)
 
     end
 
+    # TODO: change to check both left and right functionality
     def horizontalCheck(x, y)
+        row = @grid(x)
+        height = row[y]
 
+        row.each_with_index { |val, index|
+            if index != y && val
+        }
+
+        end
+        
+        return true
     end
 
     def question1
