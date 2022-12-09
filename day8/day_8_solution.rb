@@ -1,9 +1,3 @@
-# parse file into array of arrays (watch for new line characters)
-# vertical check for a given cell
-# horizontal check for a given cell
-# loop across array and do check for each cell not on edge
-# keep running total
-
 class TreeGrid
 
     def initialize(fileName)
@@ -90,10 +84,81 @@ class TreeGrid
     end
 
     def question2
+        parseDataFile
+        scores = []
 
+        @grid.each_with_index { |arr, y|
+            arr.each_with_index { |val, x|
+                if x != 0 && y != 0 && x != @grid.length - 1 && y != @grid.length - 1
+                    score = getViewScore(x, y)
+                    scores.append(score)
+                end
+            }
+        }
+
+        return scores.max()
+    end
+
+    def getViewScore(x, y)
+        return vertScores(x, y) * horScores(x, y)
+    end
+
+    def vertScores(x, y)
+        height = @grid[y][x]
+        topCount = 0
+        bottomCount = 0
+
+        counter = y - 1
+        while counter > -1
+            if @grid[counter][x] >= height
+                topCount += 1
+                break
+            end
+            topCount += 1
+            counter -= 1
+        end
+
+        counter = y + 1
+        while counter < @grid.length
+            if @grid[counter][x] >= height
+                bottomCount += 1
+                break
+            end
+            bottomCount += 1
+            counter += 1
+        end
+
+        return topCount * bottomCount
+    end
+
+    def horScores(x, y)
+        row = @grid[y]
+        left = row[0, x]
+        right = row[x + 1, row.length]
+        height = row[x]
+        leftCount = 0
+        rightCount = 0
+
+        left.reverse_each { |val|
+            if val >= height
+                leftCount += 1
+                break
+            end
+            leftCount += 1
+        }
+
+        right.each { |val|
+            if val >= height
+                rightCount += 1
+                break
+            end
+            rightCount += 1
+        }
+
+        return leftCount * rightCount
     end
 end
 
 dataFile = "real.txt"
 forest = TreeGrid.new(dataFile)
-puts forest.question1
+puts forest.question2
