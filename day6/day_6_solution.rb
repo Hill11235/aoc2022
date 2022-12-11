@@ -2,28 +2,59 @@ class Day6
 
     def initialize(fileName)
         @fileName = fileName
+        @dataBuffer = ""
     end
 
     def parseFile
         File.readlines(@fileName).each do |line|
-            parseLine(line)
+            @dataBuffer = line
         end
     end
-
-    def parseLine(line)
-
+    
+    def splitStringArray
+        return @dataBuffer.scan(/\w/)
     end
 
-    def question1
+    def parseChars(arr, limit)
+        charArray = []
 
+        arr.each_with_index { |char, index|
+            if index < limit
+               charArray.append(char)
+            elsif
+                if checkCharsUnique(charArray, limit)
+                    return getSubstringPosition(charArray, limit)
+                else
+                    charArray.shift
+                    charArray.append(char)
+                end    
+            end
+        }
+
+        return -1
     end
 
-    def question2
+    def getSubstringPosition(arr, limit)
+        str = ""
+        arr.each{ |char|
+            str += char
+        }
 
+        return @dataBuffer.index(str) + limit
+    end
+
+    def checkCharsUnique(arr, limit)
+        uniqueArr = arr.uniq
+        return uniqueArr.length == limit
+    end
+
+    def parseBuffer(limit)
+        parseFile()
+        splitArr = splitStringArray()
+        puts parseChars(splitArr, limit)
     end
 end
 
-fileName = "test.txt"
+fileName = "real.txt"
 instance = Day6.new(fileName)
-instance.question1
-instance.question2
+instance.parseBuffer(14)
