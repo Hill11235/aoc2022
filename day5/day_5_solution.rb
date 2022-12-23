@@ -5,20 +5,20 @@ class Day5
         @stacks = []
     end
 
-    def parseFile
+    def parseFile(question1)
         File.readlines(@fileName).each do |line|
-            parseLine(line)
+            parseLine(line, question1)
         end
     end
 
-    def parseLine(line)
+    def parseLine(line, question1)
         if @stacks.length == 0
             createStacks(line)
         end
         if line.include?("[")
             addToStacks(line)
         elsif line.include?("move")
-            moveItems(line)
+            moveItems(line, question1)
         end
     end
 
@@ -42,35 +42,42 @@ class Day5
         end
     end
 
-    def moveItems(line)
+    def moveItems(line, question1)
         words = line.split
-        shiftFreight(words[1].to_i, words[3].to_i, words[5].to_i)
+        if question1
+            shiftFreightIndividual(words[1].to_i, words[3].to_i, words[5].to_i)
+        elsif
+            shiftFreightMultiple(words[1].to_i, words[3].to_i, words[5].to_i)
+        end
     end
 
-    def shiftFreight(howMany, from, to)
+    def shiftFreightIndividual(howMany, from, to)
         howMany.times do
             cargo = @stacks[from - 1].shift
             @stacks[to - 1].unshift(cargo)
         end
     end
 
-    def printTopLine()
+    def shiftFreightMultiple(howMany, from, to)
+        howMany = [howMany - 1, 0].max
+        lifted = @stacks[from - 1].slice!(0..howMany)
+        @stacks[to - 1] = lifted + @stacks[to - 1]
+    end
+
+    def printTopLine
         @stacks.each { |x|
             print x[0]
         }
+        puts ""
     end
 
-    def question1
-        parseFile
+    def question(question1)
+        parseFile(question1)
         printTopLine
-    end
-
-    def question2
-
     end
 end
 
 fileName = "real.txt"
 instance = Day5.new(fileName)
-instance.question1
-#instance.question2
+#instance.question(true)
+instance.question(false)
